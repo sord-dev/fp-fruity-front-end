@@ -44,6 +44,25 @@ section {
     margin: 12px auto;
 }
 
+
+button {
+
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    color: rgb(60, 66, 87);
+    background-color: rgb(255, 255, 255);
+    box-shadow: rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(0 0 0 / 12%) 0px 1px 1px 0px, rgb(60 66 87 / 16%) 0px 0px 0px 1px, rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(0 0 0 / 0%) 0px 0px 0px 0px, rgb(60 66 87 / 8%) 0px 2px 5px 0px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 8px;
+    display: inline-block;
+    min-height: 28px;
+    transition: background-color .24s, box-shadow .24s;
+
+}
+
 /* fruit form */
 
 #input-sect form {
@@ -58,11 +77,6 @@ section {
 #picture-sect .error,
 #input-sect form .error {
     color: red;
-}
-
-
-#input-sect form button {
-    padding: 6px 12px;
 }
 
 #input-sect form input[type="text"] {
@@ -82,7 +96,7 @@ section {
 #nutrition-sect {
     display: flex;
     flex-direction: column;
-    gap: 1em    ;
+    gap: 1em;
 }
 
 #fruit-sect {
@@ -122,10 +136,14 @@ section {
 
 /* picture section */
 
-#picture-sect {
- display: grid;
- grid-template-columns: repeat(4, 1fr);
- grid-template-rows: auto 1fr auto;
+#picture-sect button {
+    margin-bottom: 10px;
+}
+
+#picture-sect .images {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto 1fr auto;
 }
 
 #picture-sect img {
