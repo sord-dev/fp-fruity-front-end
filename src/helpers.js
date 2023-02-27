@@ -10,6 +10,13 @@ function useForm(e) {
     return values;
 }
 
+function createFormError(error, form) {
+    const errorEl = document.createElement('p')
+    errorEl.textContent = error;
+    errorEl.className = 'form-error';
+    form.appendChild(errorEl)
+}
+
 function appendToList(content, list) {
     const el = document.createElement("li");
     el.textContent = content;
@@ -19,4 +26,4 @@ function appendToList(content, list) {
 }
 
 
-module.exports = { useForm, appendToList }
+module.exports = { useForm, appendToList, createFormError }
