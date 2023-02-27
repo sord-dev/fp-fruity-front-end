@@ -24,6 +24,28 @@ const fruity = {
 
 module.exports = { fruity }
 },{}],2:[function(require,module,exports){
+const { fruity } = require('./fruityAPI')
+const { pixabay } = require('./pixabayAPI')
+
+module.exports = {fruity, pixabay}
+},{"./fruityAPI":1,"./pixabayAPI":3}],3:[function(require,module,exports){
+const TEMP_KEY = '33986162-cedca4d11848ce9f647a94446'
+
+const pixabay = {
+    baseurl: 'https://pixabay.com/api',
+    async getPicture(query) {
+        try {
+            const pRes = await fetch(`${this.baseurl}/?key=${TEMP_KEY}&q=${query}&image_type=photo`);
+            const res = await pRes.json();
+            return res;
+        } catch (error) {
+            return error;
+        }
+    },
+};
+
+module.exports = { pixabay }
+},{}],4:[function(require,module,exports){
 function useForm(e) {
     e.preventDefault();
     let values = {};
@@ -40,7 +62,7 @@ function createFormError(error, form) {
     const errorEl = document.createElement('p')
     errorEl.textContent = error;
     errorEl.className = 'form-error';
-    form.appendChild(errorEl)
+    return errorEl;
 }
 
 function createFruitCard(fruitRes) {
@@ -74,9 +96,9 @@ function createFruitCard(fruitRes) {
 
 
 module.exports = { useForm, createFormError, createFruitCard }
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 const { useForm, createFormError, createFruitCard } = require("./helpers");
-const { fruity } = require("./fruityAPI");
+const { fruity, pixabay } = require("./apis");
 
 const fruitForm = document.querySelector("#input-sect form");
 const nutritionList = document.querySelector("#nutrition-sect ul");
@@ -88,15 +110,25 @@ fruitForm.addEventListener("submit", async (e) => {
     const { fruit } = useForm(e);
     if (!fruit.replace(/[^a-z]/gi, '')) return;
     const res = await fruity.getFruit(fruit);
+    const picRes = await pixabay.getPicture(fruit);
 
     if (res.id) {
         const card = createFruitCard(res);
+        nutritionList.appendChild(card);
+
         const { calories } = res.nutritions;
         cals += calories;
         totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`
-        nutritionList.appendChild(card)
+
+        const err = fruitForm.querySelector('.form-error')
+        if (err) err.remove();
+
     } else {
-        createFormError(res.error, fruitForm)
+        const err = fruitForm.querySelector('.form-error')
+        if (err) err.remove();
+
+        const errEl = createFormError(res.error, fruitForm)
+        fruitForm.appendChild(errEl)
     }
 });
 
@@ -107,4 +139,6 @@ nutritionList.addEventListener('click', (e) => {
 
     item.remove();
 })
-},{"./fruityAPI":1,"./helpers":2}]},{},[3]);
+
+
+},{"./apis":2,"./helpers":4}]},{},[5]);

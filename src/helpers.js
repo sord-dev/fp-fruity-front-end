@@ -14,7 +14,7 @@ function createFormError(error, form) {
     const errorEl = document.createElement('p')
     errorEl.textContent = error;
     errorEl.className = 'form-error';
-    form.appendChild(errorEl)
+    return errorEl;
 }
 
 function createFruitCard(fruitRes) {
