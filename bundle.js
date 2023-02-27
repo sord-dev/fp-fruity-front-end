@@ -11,34 +11,29 @@ function useForm(e) {
     return values;
 }
 
-function addFruit(fruit) {
+function appendToList(content, list) {
     const el = document.createElement("li");
-    el.textContent = fruit;
-
-    nutritionList.appendChild(el);
+    el.textContent = content;
+    el.className = 'fruit-list-item';
+    list.appendChild(el);
 }
 
 
-module.exports = { useForm, addFruit }
+module.exports = { useForm, appendToList }
 },{}],2:[function(require,module,exports){
-const { useForm } = require("./helpers");
+const { useForm, appendToList } = require("./helpers");
 
 const fruitForm = document.querySelector("#input-sect form");
 const nutritionList = document.querySelector("#nutrition-sect ul");
 
 fruitForm.addEventListener("submit", e => {
     const { fruit } = useForm(e);
-
-    if (!!fruit) addFruit(fruit);
+    if(!fruit.replace(/[^a-z]/gi, '')) return;
+    appendToList(fruit, nutritionList);
 })
 
-nutritionList.addEventListener('click', (e)  => e.target.remove());
+nutritionList.addEventListener('click', (e) => e.target.remove());
 
-function addFruit(fruit) {
-    const el = document.createElement("li");
-    el.textContent = fruit;
-    el.className = 'fruit-list-item'
 
-    nutritionList.appendChild(el);
-}
+
 },{"./helpers":1}]},{},[2]);

@@ -71,6 +71,7 @@ section {
     align-items: center;
     justify-content: center;
     gap: 1em;
+    flex-wrap: wrap;
 }
 
 #fruit-sect .fruit-result {
@@ -80,7 +81,14 @@ section {
 }
 
 /* item */
+.fruit-list {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1em;
 
+}
 .fruit-list-item {
     cursor: pointer;
     background-color: bisque;

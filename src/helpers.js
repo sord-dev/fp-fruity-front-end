@@ -10,12 +10,12 @@ function useForm(e) {
     return values;
 }
 
-function addFruit(fruit) {
+function appendToList(content, list) {
     const el = document.createElement("li");
-    el.textContent = fruit;
-
-    nutritionList.appendChild(el);
+    el.textContent = content;
+    el.className = 'fruit-list-item';
+    list.appendChild(el);
 }
 
 
-module.exports = { useForm, addFruit }
+module.exports = { useForm, appendToList }
