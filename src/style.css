@@ -136,6 +136,11 @@ button {
 
 /* picture section */
 
+#picture-sect .images {
+    border: 1px solid rgb(181, 180, 180);
+    padding: 1em 0;
+}
+
 #picture-sect button {
     margin-bottom: 10px;
 }
@@ -148,7 +153,7 @@ button {
 
 #picture-sect img {
     margin: 0 auto;
-    width: 80%;
+    width: 90%;
 }
 
 @media screen and (max-width: 780px) {

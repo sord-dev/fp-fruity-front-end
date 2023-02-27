@@ -4,7 +4,6 @@ const { fruity, pixabay } = require("./apis");
 // dom elements
 const fruitForm = document.querySelector("#input-sect form");
 const nutritionList = document.querySelector("#nutrition-sect ul");
-const pictureListSect = document.querySelector('#picture-sect');
 const pictureList = document.querySelector('#picture-sect .images');
 const totalCalElement = document.querySelector('#nutrition-sect .fruit-total');
 const clearImgButton = document.querySelector('#picture-sect .picture-clear');
@@ -14,7 +13,7 @@ let cals = 0;
 
 // event listeners
 fruitForm.addEventListener("submit", async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // get user data
     const { fruit } = useForm(e);
     if (!fruit.replace(/[^a-z]/gi, '')) return;
@@ -22,6 +21,7 @@ fruitForm.addEventListener("submit", async (e) => {
     // call apis based on data
     const res = await fruity.getFruit(fruit);
     const { hits } = await pixabay.getPicture(fruit);
+    
     // trim picture response
     const searchImages = hits.slice(0, 2);
 
@@ -29,9 +29,6 @@ fruitForm.addEventListener("submit", async (e) => {
     if (searchImages) {
         searchImages.forEach((image) => {
             const fruitCard = createImageCard(image);
-
-            console.log(pictureList);
-
             pictureList.appendChild(fruitCard);
         })
 
@@ -83,7 +80,8 @@ clearImgButton.addEventListener('click', () => {
     pictureList.innerHTML = ''
 })
 
+// handle download image on click
 pictureList.addEventListener('click', (e) => {
     const item = e.target.closest('img');
-    if(item) window.open(item.src)
+    if (item) window.open(item.src)
 })
