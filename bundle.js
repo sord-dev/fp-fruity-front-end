@@ -43,35 +43,68 @@ function createFormError(error, form) {
     form.appendChild(errorEl)
 }
 
-function appendToList(content, list) {
+function createFruitCard(fruitRes) {
+
+    const { name, genus, nutritions } = fruitRes;
+
+    console.log("creating card... ", { name, genus, nutritions });
+
     const el = document.createElement("li");
-    el.textContent = content;
+
+    const content = `<h2>${name} - ${genus}</h2>`
+    el.innerHTML = content;
+
+    const innerEl = document.createElement('div')
+
+    Object.entries(nutritions).forEach((item) => {
+        const dataTag = document.createElement('p')
+        let k = item[0];
+        let v = item[1];
+
+        dataTag.textContent = `${k} - ${v}`
+        innerEl.appendChild(dataTag)
+    })
+
+    el.appendChild(innerEl)
     el.className = 'fruit-list-item';
-    el.dataset = 'data-item'
-    list.appendChild(el);
+    el.dataset.calories = nutritions.calories;
+
+    return el
 }
 
 
-module.exports = { useForm, appendToList, createFormError }
+module.exports = { useForm, createFormError, createFruitCard }
 },{}],3:[function(require,module,exports){
-const { useForm, appendToList, createFormError } = require("./helpers");
+const { useForm, createFormError, createFruitCard } = require("./helpers");
 const { fruity } = require("./fruityAPI");
 
 const fruitForm = document.querySelector("#input-sect form");
 const nutritionList = document.querySelector("#nutrition-sect ul");
+const totalCalElement = document.querySelector('#nutrition-sect .fruit-total');
+
+let cals = 0;
 
 fruitForm.addEventListener("submit", async (e) => {
     const { fruit } = useForm(e);
-    if (!fruit.replace(/[^a-z0-9]/gi, '')) return;
+    if (!fruit.replace(/[^a-z]/gi, '')) return;
     const res = await fruity.getFruit(fruit);
 
-    res.id ? appendToList(res, nutritionList) 
-    : createFormError(res.error, fruitForm)
-
+    if (res.id) {
+        const card = createFruitCard(res);
+        const { calories } = res.nutritions;
+        cals += calories;
+        totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`
+        nutritionList.appendChild(card)
+    } else {
+        createFormError(res.error, fruitForm)
+    }
 });
 
 nutritionList.addEventListener('click', (e) => {
-    if (e.target.className === 'fruit-list') return
-    e.target.remove();
-});
+    const item = e.target.closest('li');
+    cals -= item.dataset.calories;
+    totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`
+
+    item.remove();
+})
 },{"./fruityAPI":1,"./helpers":2}]},{},[3]);
