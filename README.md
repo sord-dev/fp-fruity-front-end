@@ -1,6 +1,8 @@
 # fp-fruit-salads
 
-*A fruit salad application*
+*A fruit salad application...?*
+
+Search for fruits and get info and images about them in response.
 
 ## Features
 
