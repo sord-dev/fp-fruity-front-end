@@ -6,5 +6,7 @@ fruitForm.addEventListener("submit", e => {
     let inputs = fruitForm.querySelectorAll('input');
     inputs.forEach(input => values[input.name] = input.value)
 
+
+    console.log(values);
     return values;
 })
