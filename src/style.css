@@ -59,9 +59,17 @@ section {
     padding: 6px 12px;
 }
 
-#input-sect form div input[type="text"] {
+#input-sect form input[type="text"] {
     font-size: 1em;
-    padding: 6px 12px;
+    padding: 8px 16px;
+    transition: 500ms;
+    outline: none;
+}
+
+
+#input-sect form input[type="text"]:hover,
+#input-sect form input[type="text"]:focus {
+    border: 1px solid rgb(201, 2, 201);
 }
 
 /* fruit results */
@@ -89,9 +97,10 @@ section {
     gap: 1em;
 
 }
+
 .fruit-list-item {
     cursor: pointer;
     background-color: bisque;
-    width: min-content;
+    min-width: 270px;
     padding: 1em;
 }

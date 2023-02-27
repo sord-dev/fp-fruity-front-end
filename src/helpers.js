@@ -14,6 +14,7 @@ function appendToList(content, list) {
     const el = document.createElement("li");
     el.textContent = content;
     el.className = 'fruit-list-item';
+    el.dataset = 'data-item'
     list.appendChild(el);
 }
 
