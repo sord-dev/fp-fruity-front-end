@@ -1,4 +1,4 @@
-const TEMP_KEY = "33986162-cedca4d11848ce9f647a94446";
+const TEMP_KEY = null;
 
 if (!TEMP_KEY) throw new Error("Enter a api key for pixabay API -- https://pixabay.com/api/docs/#api_search_images")
 

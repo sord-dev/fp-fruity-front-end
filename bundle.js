@@ -29,7 +29,7 @@ const { pixabay } = require('./pixabayAPI')
 
 module.exports = {fruity, pixabay}
 },{"./fruityAPI":1,"./pixabayAPI":3}],3:[function(require,module,exports){
-const TEMP_KEY = "33986162-cedca4d11848ce9f647a94446";
+const TEMP_KEY = null;
 
 if (!TEMP_KEY) throw new Error("Enter a api key for pixabay API -- https://pixabay.com/api/docs/#api_search_images")
 
@@ -49,150 +49,133 @@ const pixabay = {
 module.exports = { pixabay }
 },{}],4:[function(require,module,exports){
 function useForm(e) {
-    e.preventDefault();
-    let values = {};
-    let inputs = e.target.querySelectorAll('input');
+  e.preventDefault();
+  let values = {};
+  let inputs = e.target.querySelectorAll("input");
 
-    inputs.forEach(input => values[input.name] = input.value);
+  inputs.forEach((input) => (values[input.name] = input.value));
 
-    e.target.reset();
+  e.target.reset();
 
-    return values;
+  return values;
 }
 
-function createFormError(error) {
-    const errorEl = document.createElement('p')
-    errorEl.textContent = error;
-    errorEl.className = 'error';
-    return errorEl;
+function createFormError(error, form) {
+  const errorEl = document.createElement("p");
+  errorEl.textContent = error;
+  errorEl.className = "error";
+  form.appendChild(errorEl);
 }
 
-function createImageCard(image) {
-    const { previewURL } = image;
-    const fruitImg = document.createElement('img');
+function createImageCard(image, list) {
+  if (!image.previewURL) createFormError("no image results", list);
+  const { previewURL } = image;
+  const fruitImg = document.createElement("img");
 
-    fruitImg.src = previewURL;
+  fruitImg.src = previewURL;
 
-    return fruitImg
+  list.appendChild(fruitImg);
 }
 
-function createFruitCard(fruitRes) {
-
+function createFruitCard(fruitRes, list, errLocation = false) {
+  let errEl;
+  errLocation ? (errEl = errLocation) : (errEl = list);
+  if (!fruitRes.id) createFormError(fruitRes.error, errEl);
+  else {
     const { name, genus, nutritions } = fruitRes;
-
-    console.log("creating card... ", { name, genus, nutritions });
-
     const el = document.createElement("li");
 
-    const content = `<h2>${name} - ${genus}</h2>`
+    const content = `<h2>${name} - ${genus}</h2>`;
     el.innerHTML = content;
 
-    const innerEl = document.createElement('div')
+    const innerEl = document.createElement("div");
 
     Object.entries(nutritions).forEach((item) => {
-        const dataTag = document.createElement('p')
-        let k = item[0];
-        let v = item[1];
+      const dataTag = document.createElement("p");
+      let k = item[0];
+      let v = item[1];
 
-        dataTag.textContent = `${k} - ${v}`
-        innerEl.appendChild(dataTag)
-    })
+      dataTag.textContent = `${k} - ${v}`;
+      innerEl.appendChild(dataTag);
+    });
 
-    el.appendChild(innerEl)
-    el.className = 'fruit-list-item';
+    el.appendChild(innerEl);
+    el.className = "fruit-list-item";
     el.dataset.calories = nutritions.calories;
 
-    return el
+    list.appendChild(el);
+  }
 }
 
+module.exports = {
+  useForm,
+  createFormError,
+  createFruitCard,
+  createImageCard,
+};
 
-module.exports = { useForm, createFormError, createFruitCard, createImageCard }
 },{}],5:[function(require,module,exports){
-const { useForm, createFormError, createFruitCard, createImageCard } = require("./helpers");
+const { useForm, createFruitCard, createImageCard } = require("./helpers");
+
 const { fruity, pixabay } = require("./apis");
 
-// dom elements
+// --- dom elements ---
 const fruitForm = document.querySelector("#input-sect form");
 const nutritionList = document.querySelector("#nutrition-sect ul");
-const pictureList = document.querySelector('#picture-sect .images');
-const totalCalElement = document.querySelector('#nutrition-sect .fruit-total');
-const clearImgButton = document.querySelector('#picture-sect .picture-clear');
+const pictureList = document.querySelector("#picture-sect .images");
+const totalCalElement = document.querySelector("#nutrition-sect .fruit-total");
+const clearImgButton = document.querySelector("#picture-sect .picture-clear");
 
-// page state
+// --- page state ---
 let cals = 0;
 
-// event listeners
+const incrimentCals = (ammount) => {
+  cals += ammount;
+  totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`;
+};
+
+const decrimentCals = (ammount) => {
+  cals -= ammount;
+  totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`;
+};
+
+// --- event listeners ---
 fruitForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    // get user data
-    const { fruit } = useForm(e);
-    if (!fruit.replace(/[^a-z]/gi, '')) return;
+  e.preventDefault();
+  // get user data
+  const { fruit } = useForm(e);
+  if (!fruit.replace(/[^a-z]/gi, "")) return;
 
-    // call apis based on data
-    const res = await fruity.getFruit(fruit);
-    const { hits } = await pixabay.getPicture(fruit);
-    
-    // trim picture response
-    const searchImages = hits.slice(0, 2);
+  // call apis based on data
+  const res = await fruity.getFruit(fruit);
+  const { hits } = await pixabay.getPicture(fruit);
 
-    // if there are search images append them to the dom
-    if (searchImages) {
-        searchImages.forEach((image) => {
-            const fruitCard = createImageCard(image);
-            pictureList.appendChild(fruitCard);
-        })
+  // pick random image lol
+  const img = hits[Math.floor(Math.random() * hits.length)];
 
-    }
-    // show error if there arent any results
-    else {
-        const errEl = createFormError('no image results')
-        pictureList.appendChild(errEl)
-    }
-
-
-    // if there is a res from the fruit api append them to the dom
-    if (res.id) {
-        const card = createFruitCard(res);
-        nutritionList.appendChild(card);
-
-        // keep track of calories
-        const { calories } = res.nutritions;
-        cals += calories;
-        totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`
-
-        // remove error as there was a success
-        const err = fruitForm.querySelector('.form-error')
-        if (err) err.remove();
-
-    }
-    // else, show error
-    else {
-        const err = fruitForm.querySelector('.form-error')
-        if (err) err.remove();
-
-        const errEl = createFormError(res.error, fruitForm)
-        fruitForm.appendChild(errEl)
-    }
+  createFruitCard(res, nutritionList, fruitForm);
+  createImageCard(img, pictureList);
+  incrimentCals(res.nutritions.calories || 0);
 });
 
-
 // handle delete on click
-nutritionList.addEventListener('click', (e) => {
-    const item = e.target.closest('li');
-    cals -= item.dataset.calories;
-    totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`
-
-    item.remove();
-})
+nutritionList.addEventListener("click", (e) => {
+  const item = e.target.closest("li");
+  decrimentCals(item.dataset.calories);
+  item.remove();
+});
 
 // handle delete on click button for images
-clearImgButton.addEventListener('click', () => {
-    pictureList.innerHTML = ''
-})
+clearImgButton.addEventListener("click", () => {
+  pictureList.innerHTML = "";
+});
 
-// handle download image on click
-pictureList.addEventListener('click', (e) => {
-    const item = e.target.closest('img');
-    if (item) window.open(item.src)
-})
+// handle download image on click -- this is hella annoying as a feature
+// pictureList.addEventListener("click", (e) => {
+//   const item = e.target.closest("img");
+//   if (item) window.open(item.src);
+// });
+
+// PS why is it so verbose to do the simpliest of things bruh... i hate vnl js....
+
 },{"./apis":2,"./helpers":4}]},{},[5]);
