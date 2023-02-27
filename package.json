@@ -2,12 +2,12 @@
   "name": "fruit-salad-app",
   "version": "1.0.0",
   "description": "",
-  "main": "script.js",
+  "main": "bundle.js",
   "scripts": {
     "watch": "watchify ./src/main.js -o ./bundle.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "sord-dev",
   "license": "ISC",
   "dependencies": {
     "watchify": "^4.0.0"

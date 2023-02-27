@@ -35,27 +35,55 @@ img {
     height: auto;
 }
 
+section {
+    margin-top: 20px;
+}
+
 .container {
-    max-width: 98%;
+    max-width: 90%;
     margin: 12px auto;
 }
+
+/* fruit form */
 
 #input-sect form {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 1em;
     max-width: 300px;
     margin: 0 auto;
 }
 
-#input-sect form div {
-    display: flex;
-    gap: 6px;
-    flex-direction: column;
+#input-sect form button {
+    padding: 6px 12px;
 }
 
-#input-sect form div input[type="text"]{
+#input-sect form div input[type="text"] {
     font-size: 1em;
     padding: 6px 12px;
+}
+
+/* fruit results */
+
+#fruit-sect {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+#fruit-sect .fruit-result {
+    width: 250px;
+    height: 250px;
+    background-color: bisque;
+}
+
+/* item */
+
+.fruit-list-item {
+    cursor: pointer;
+    background-color: bisque;
+    width: min-content;
+    padding: 1em;
 }
