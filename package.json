@@ -10,7 +10,6 @@
   "author": "sord-dev",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^16.0.3",
     "watchify": "^4.0.0"
   }
 }

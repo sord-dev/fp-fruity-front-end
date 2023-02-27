@@ -1,4 +1,6 @@
-const TEMP_KEY = '33986162-cedca4d11848ce9f647a94446'
+const TEMP_KEY = null
+
+if (!TEMP_KEY) throw new Error("Please enter a api key for pixabay API -- https://pixabay.com/")
 
 const pixabay = {
     baseurl: 'https://pixabay.com/api',

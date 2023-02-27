@@ -29,7 +29,9 @@ const { pixabay } = require('./pixabayAPI')
 
 module.exports = {fruity, pixabay}
 },{"./fruityAPI":1,"./pixabayAPI":3}],3:[function(require,module,exports){
-const TEMP_KEY = '33986162-cedca4d11848ce9f647a94446'
+const TEMP_KEY = null
+
+if (!TEMP_KEY) throw new Error("Please enter a api key for pixabay API -- https://pixabay.com/")
 
 const pixabay = {
     baseurl: 'https://pixabay.com/api',
@@ -58,11 +60,20 @@ function useForm(e) {
     return values;
 }
 
-function createFormError(error, form) {
+function createFormError(error) {
     const errorEl = document.createElement('p')
     errorEl.textContent = error;
-    errorEl.className = 'form-error';
+    errorEl.className = 'error';
     return errorEl;
+}
+
+function createImageCard(image) {
+    const { previewURL } = image;
+    const fruitImg = document.createElement('img');
+
+    fruitImg.src = previewURL;
+
+    return fruitImg
 }
 
 function createFruitCard(fruitRes) {
@@ -95,13 +106,14 @@ function createFruitCard(fruitRes) {
 }
 
 
-module.exports = { useForm, createFormError, createFruitCard }
+module.exports = { useForm, createFormError, createFruitCard, createImageCard }
 },{}],5:[function(require,module,exports){
-const { useForm, createFormError, createFruitCard } = require("./helpers");
+const { useForm, createFormError, createFruitCard, createImageCard } = require("./helpers");
 const { fruity, pixabay } = require("./apis");
 
 const fruitForm = document.querySelector("#input-sect form");
 const nutritionList = document.querySelector("#nutrition-sect ul");
+const pictureList = document.querySelector('#picture-sect');
 const totalCalElement = document.querySelector('#nutrition-sect .fruit-total');
 
 let cals = 0;
@@ -110,7 +122,19 @@ fruitForm.addEventListener("submit", async (e) => {
     const { fruit } = useForm(e);
     if (!fruit.replace(/[^a-z]/gi, '')) return;
     const res = await fruity.getFruit(fruit);
-    const picRes = await pixabay.getPicture(fruit);
+    const { hits } = await pixabay.getPicture(fruit);
+    const searchImages = hits.slice(0, 5);
+
+    if (searchImages) {
+        searchImages.forEach((image) => {
+            const fruitCard = createImageCard(image);
+            
+            pictureList.appendChild(fruitCard);
+        })
+    } else {
+        const errEl = createFormError('no image results')
+        fruitForm.appendChild(errEl)
+    }
 
     if (res.id) {
         const card = createFruitCard(res);

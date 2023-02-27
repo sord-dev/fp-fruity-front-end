@@ -10,11 +10,20 @@ function useForm(e) {
     return values;
 }
 
-function createFormError(error, form) {
+function createFormError(error) {
     const errorEl = document.createElement('p')
     errorEl.textContent = error;
-    errorEl.className = 'form-error';
+    errorEl.className = 'error';
     return errorEl;
+}
+
+function createImageCard(image) {
+    const { previewURL } = image;
+    const fruitImg = document.createElement('img');
+
+    fruitImg.src = previewURL;
+
+    return fruitImg
 }
 
 function createFruitCard(fruitRes) {
@@ -47,4 +56,4 @@ function createFruitCard(fruitRes) {
 }
 
 
-module.exports = { useForm, createFormError, createFruitCard }
+module.exports = { useForm, createFormError, createFruitCard, createImageCard }

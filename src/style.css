@@ -55,9 +55,11 @@ section {
     margin: 0 auto;
 }
 
-#input-sect form .form-error {
+#picture-sect .error,
+#input-sect form .error {
     color: red;
 }
+
 
 #input-sect form button {
     padding: 6px 12px;
@@ -77,6 +79,11 @@ section {
 }
 
 /* fruit results */
+#nutrition-sect {
+    display: flex;
+    flex-direction: column;
+    gap: 1em    ;
+}
 
 #fruit-sect {
     display: flex;
@@ -96,7 +103,7 @@ section {
 .fruit-list {
     display: flex;
     align-items: center;
-    flex-direction: column;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 1em;
 
@@ -109,6 +116,37 @@ section {
     padding: 1em;
 }
 
-.fruit-list-item h2{
+.fruit-list-item h2 {
     margin-bottom: 12px;
+}
+
+/* picture section */
+
+#picture-sect {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ grid-template-rows: auto 1fr auto;
+}
+
+#picture-sect img {
+    margin: 0 auto;
+    width: 80%;
+}
+
+@media screen and (max-width: 780px) {
+    #picture-sect {
+        grid-template-columns: repeat(3, 1fr)
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #picture-sect {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 360px) {
+    #picture-sect {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
