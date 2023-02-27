@@ -6,6 +6,8 @@
 
 - Form validation
 - API intigration
+- Calorie Counter
+- Image Search
 
 ## Potential Future Features
 
