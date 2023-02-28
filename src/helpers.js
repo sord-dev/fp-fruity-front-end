@@ -17,6 +17,11 @@ function createFormError(error, form) {
   form.appendChild(errorEl);
 }
 
+function clearFormError(form){
+  const err = form.querySelector(".error");
+  if(err) err.remove();
+}
+
 function createImageCard(image, list) {
   if (!image.previewURL) createFormError("no image results", list);
   const { previewURL } = image;
@@ -25,12 +30,13 @@ function createImageCard(image, list) {
   fruitImg.src = previewURL;
 
   list.appendChild(fruitImg);
+  clearFormError(list)
 }
 
 function createFruitCard(fruitRes, list, errLocation = false) {
   let errEl;
   errLocation ? (errEl = errLocation) : (errEl = list);
-  if (!fruitRes.id) createFormError(fruitRes.error, errEl);
+  if (!fruitRes.id) createFormError('fruit not found.', errEl);
   else {
     const { name, genus, nutritions } = fruitRes;
     const el = document.createElement("li");
@@ -54,6 +60,7 @@ function createFruitCard(fruitRes, list, errLocation = false) {
     el.dataset.calories = nutritions.calories;
 
     list.appendChild(el);
+    clearFormError(errEl)
   }
 }
 

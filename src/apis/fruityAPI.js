@@ -1,5 +1,5 @@
 const fruity = {
-    baseurl: 'https://fruity-api.onrender.com',
+    baseurl: 'https://fruit-api.onrender.com',
     async getFruit(query) {
         try {
             const pRes = await fetch(`${this.baseurl}/fruits/${query}`);

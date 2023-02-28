@@ -1,6 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const fruity = {
-    baseurl: 'https://fruity-api.onrender.com',
+    baseurl: 'https://fruit-api.onrender.com',
     async getFruit(query) {
         try {
             const pRes = await fetch(`${this.baseurl}/fruits/${query}`);
@@ -29,7 +29,7 @@ const { pixabay } = require('./pixabayAPI')
 
 module.exports = {fruity, pixabay}
 },{"./fruityAPI":1,"./pixabayAPI":3}],3:[function(require,module,exports){
-const TEMP_KEY = null;
+const TEMP_KEY = "33986162-cedca4d11848ce9f647a94446";
 
 if (!TEMP_KEY) throw new Error("Enter a api key for pixabay API -- https://pixabay.com/api/docs/#api_search_images")
 
@@ -67,6 +67,11 @@ function createFormError(error, form) {
   form.appendChild(errorEl);
 }
 
+function clearFormError(form){
+  const err = form.querySelector(".error");
+  if(err) err.remove();
+}
+
 function createImageCard(image, list) {
   if (!image.previewURL) createFormError("no image results", list);
   const { previewURL } = image;
@@ -75,12 +80,13 @@ function createImageCard(image, list) {
   fruitImg.src = previewURL;
 
   list.appendChild(fruitImg);
+  clearFormError(list)
 }
 
 function createFruitCard(fruitRes, list, errLocation = false) {
   let errEl;
   errLocation ? (errEl = errLocation) : (errEl = list);
-  if (!fruitRes.id) createFormError(fruitRes.error, errEl);
+  if (!fruitRes.id) createFormError('fruit not found.', errEl);
   else {
     const { name, genus, nutritions } = fruitRes;
     const el = document.createElement("li");
@@ -104,6 +110,7 @@ function createFruitCard(fruitRes, list, errLocation = false) {
     el.dataset.calories = nutritions.calories;
 
     list.appendChild(el);
+    clearFormError(errEl)
   }
 }
 
