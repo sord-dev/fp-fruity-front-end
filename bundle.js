@@ -187,7 +187,7 @@ nutritionList.addEventListener("click", (e) => {
   item.remove();
 });
 
-// creation somewhat done 
+// creation somewhat done - SyntaxError: Unexpected token 'c', "creation e"... is not valid JSON?
 addFruitForm.addEventListener('submit', async (e) => {
   const { fruit } = useForm(e);
 
