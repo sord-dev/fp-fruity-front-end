@@ -17,50 +17,41 @@ function createFormError(error, form) {
   form.appendChild(errorEl);
 }
 
-function clearFormError(form){
-  const err = form.querySelector(".error");
-  if(err) err.remove();
-}
-
-function createImageCard(image, list) {
-  if (!image.previewURL) createFormError("no image results", list);
-  const { previewURL } = image;
+function createThumbnail(img) {
+  const { previewURL } = img;
   const fruitImg = document.createElement("img");
-
   fruitImg.src = previewURL;
 
-  list.appendChild(fruitImg);
-  clearFormError(list)
+  return fruitImg || false;
 }
 
-function createFruitCard(fruitRes, list, errLocation = false) {
-  let errEl;
-  errLocation ? (errEl = errLocation) : (errEl = list);
-  if (!fruitRes.id) createFormError('fruit not found.', errEl);
+function createFruitCard(fruitRes, list, img) {
+  if (!fruitRes.id) createFormError('fruit not found.', list);
   else {
     const { name, genus, nutritions } = fruitRes;
     const el = document.createElement("li");
 
-    const content = `<h2>${name} - ${genus}</h2>`;
-    el.innerHTML = content;
+    const fruitImg = createThumbnail(img)
+    el.appendChild(fruitImg);
+
+    const title = document.createElement('h2')
+    title.innerText = `${name} - ${genus}`
+    el.appendChild(title)
 
     const innerEl = document.createElement("div");
-
     Object.entries(nutritions).forEach((item) => {
       const dataTag = document.createElement("p");
       let k = item[0];
       let v = item[1];
-
       dataTag.textContent = `${k} - ${v}`;
       innerEl.appendChild(dataTag);
-    });
-
+    });    
     el.appendChild(innerEl);
+
     el.className = "fruit-list-item";
     el.dataset.calories = nutritions.calories;
 
-    list.appendChild(el);
-    clearFormError(errEl)
+    return el;
   }
 }
 
@@ -68,5 +59,4 @@ module.exports = {
   useForm,
   createFormError,
   createFruitCard,
-  createImageCard,
 };
