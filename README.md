@@ -1,20 +1,23 @@
 # fp-fruit-salads
 
-*A fruit salad application...?*
+*Calorie counter application*
 
-Search for fruits and get info and images about them in response.
+Search through a large list of fruits and get protein and calorie collation for selected fruits 
+
+![image](https://user-images.githubusercontent.com/75338985/222234004-c2a18c40-7c04-46ef-af5e-b329666c4064.png)
 
 ## Features
 
 - Form validation
 - API intigration
 - Calorie Counter
-- Image Search
 
 ## Potential Future Features
 
+ - Link with images
  - Cache/Local Storage
- - Adding more content
+ - Add food functionality
+ - Adding more foodtypes
 
 
 ## Cloning this repo
