@@ -1,6 +1,8 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+// acc url = https://fruit-api.onrender.com/
+
 const fruity = {
-    baseurl: 'https://fruity-api.onrender.com',
+    baseurl: 'http://localhost:3000',
     async getFruit(query) {
         try {
             const pRes = await fetch(`${this.baseurl}/fruits/${query}`);
@@ -15,6 +17,27 @@ const fruity = {
         try {
             const pRes = await fetch(`${this.baseurl}/fruits`);
             const res = await pRes.json();
+            return res;
+        } catch (error) {
+            return error;
+        }
+    },
+
+    // posts false? 
+    async postFruit(fruitData) {
+        const data = JSON.stringify(fruitData);
+        console.log(fruitData);
+        try {
+            const pRes = await fetch(`${this.baseurl}/fruits`, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: data
+            });
+
+            const res = await pRes.json();
+
             return res;
         } catch (error) {
             return error;
@@ -67,43 +90,41 @@ function createFormError(error, form) {
   form.appendChild(errorEl);
 }
 
-function createImageCard(image, list) {
-  if (!image.previewURL) createFormError("no image results", list);
-  const { previewURL } = image;
+function createThumbnail(img) {
+  const { previewURL } = img;
   const fruitImg = document.createElement("img");
-
   fruitImg.src = previewURL;
 
-  list.appendChild(fruitImg);
+  return fruitImg || false;
 }
 
-function createFruitCard(fruitRes, list, errLocation = false) {
-  let errEl;
-  errLocation ? (errEl = errLocation) : (errEl = list);
-  if (!fruitRes.id) createFormError(fruitRes.error, errEl);
+function createFruitCard(fruitRes, list, img) {
+  if (!fruitRes.id) createFormError('fruit not found.', list);
   else {
     const { name, genus, nutritions } = fruitRes;
     const el = document.createElement("li");
 
-    const content = `<h2>${name} - ${genus}</h2>`;
-    el.innerHTML = content;
+    const fruitImg = createThumbnail(img)
+    el.appendChild(fruitImg);
+
+    const title = document.createElement('h2')
+    title.innerText = `${name} - ${genus}`
+    el.appendChild(title)
 
     const innerEl = document.createElement("div");
-
     Object.entries(nutritions).forEach((item) => {
       const dataTag = document.createElement("p");
       let k = item[0];
       let v = item[1];
-
       dataTag.textContent = `${k} - ${v}`;
       innerEl.appendChild(dataTag);
-    });
-
+    });    
     el.appendChild(innerEl);
+
     el.className = "fruit-list-item";
     el.dataset.calories = nutritions.calories;
 
-    list.appendChild(el);
+    return el;
   }
 }
 
@@ -111,32 +132,30 @@ module.exports = {
   useForm,
   createFormError,
   createFruitCard,
-  createImageCard,
 };
 
 },{}],5:[function(require,module,exports){
-const { useForm, createFruitCard, createImageCard } = require("./helpers");
-
+const { useForm, createFruitCard } = require("./helpers");
 const { fruity, pixabay } = require("./apis");
 
 // --- dom elements ---
 const fruitForm = document.querySelector("#input-sect form");
 const nutritionList = document.querySelector("#nutrition-sect ul");
-const pictureList = document.querySelector("#picture-sect .images");
-const totalCalElement = document.querySelector("#nutrition-sect .fruit-total");
-const clearImgButton = document.querySelector("#picture-sect .picture-clear");
+const totalCalElement = document.querySelector('#calories')
+const addFruitForm = document.querySelector('#create-fruit-form')
 
 // --- page state ---
 let cals = 0;
 
-const incrimentCals = (ammount) => {
-  cals += ammount;
+const incrimentCals = (calories) => {
+  cals += calories;
   totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`;
 };
 
-const decrimentCals = (ammount) => {
-  cals -= ammount;
+const decrimentCals = (calories) => {
+  cals -= calories;
   totalCalElement.innerHTML = `<h3>total calories: ${cals}</h3>`;
+
 };
 
 // --- event listeners ---
@@ -150,12 +169,15 @@ fruitForm.addEventListener("submit", async (e) => {
   const res = await fruity.getFruit(fruit);
   const { hits } = await pixabay.getPicture(fruit);
 
-  // pick random image lol
+  // pick random image lol + create card from image and data
   const img = hits[Math.floor(Math.random() * hits.length)];
 
-  createFruitCard(res, nutritionList, fruitForm);
-  createImageCard(img, pictureList);
-  incrimentCals(res.nutritions.calories || 0);
+  // incriment the caloires
+  incrimentCals(res.nutritions.calories);
+
+  const card = createFruitCard(res, fruitForm, img);
+
+  nutritionList.appendChild(card)
 });
 
 // handle delete on click
@@ -165,16 +187,17 @@ nutritionList.addEventListener("click", (e) => {
   item.remove();
 });
 
-// handle delete on click button for images
-clearImgButton.addEventListener("click", () => {
-  pictureList.innerHTML = "";
-});
+// creation somewhat done - SyntaxError: Unexpected token 'c', "creation e"... is not valid JSON?
+addFruitForm.addEventListener('submit', async (e) => {
+  const { fruit } = useForm(e);
 
-// handle download image on click -- this is hella annoying as a feature
-// pictureList.addEventListener("click", (e) => {
-//   const item = e.target.closest("img");
-//   if (item) window.open(item.src);
-// });
+  const data = { name: fruit }
+
+  if (fruit) {
+    const res = await fruity.postFruit(data)
+    console.log(res);
+  }
+})
 
 // PS why is it so verbose to do the simpliest of things bruh... i hate vnl js....
 

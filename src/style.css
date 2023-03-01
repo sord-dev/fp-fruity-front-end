@@ -44,9 +44,7 @@ section {
     margin: 12px auto;
 }
 
-
 button {
-
     border: 0;
     outline: 0;
     cursor: pointer;
@@ -61,6 +59,29 @@ button {
     min-height: 28px;
     transition: background-color .24s, box-shadow .24s;
 
+}
+
+.stats-sect {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+}
+
+.stats-sect article {
+    flex: 1;
+}
+
+.nutrition-widgets {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 100%;
+}
+
+.nutrition-widgets div {
+    padding: 1em;
+    text-align: center;
+    border: 1px solid black;
 }
 
 /* fruit form */
@@ -126,7 +147,7 @@ button {
 .fruit-list-item {
     cursor: pointer;
     background-color: bisque;
-    min-width: 270px;
+    width: 100%;
     padding: 1em;
 }
 

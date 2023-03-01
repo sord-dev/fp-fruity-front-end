@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fruit Salad, Yummy Yummy.</title>
+    <link rel="shortcut icon" href="./public/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="src/style.css">
 </head>
 
@@ -15,24 +16,34 @@
             <form>
                 <h1 for="fruit">Fruit</h1>
                 <input type="text" name="fruit" placeholder="Banana..." required>
-                <button>Submit</button>
+                <div>
+                    <button>Submit</button>
+                </div>
             </form>
         </section>
 
-        <section id="nutrition-sect">
-            <h2>All the fruits</h2>
+        <section class="stats-sect">
 
-            <ul class="fruit-list"></ul>
+            <article id="nutrition-sect">
+                <h2>All the fruits</h2>
+                <ul class="fruit-list"></ul>
+            </article>
 
-            <div class="fruit-total">
-                <h3>total calories: 0</h3>
-            </div>
+            <article class="nutrition-widgets">
+                <div id="calories">
+                    <h3>total calories: 0</h3>
+                </div>
+            </article>
         </section>
 
-        <section id="picture-sect">
-            <button class="picture-clear">clear images</button>
-            <div class="images">
-            </div>
+
+        <section id="create-fruit">
+            <h3>Create fruit</h3>
+            <form id="create-fruit-form">
+                <label for="fruit-name">Name</label>
+                <input type="text" name="fruit" placeholder="Banana..." required> 
+                <button>Submit</button>
+            </form>
         </section>
     </main>
 
