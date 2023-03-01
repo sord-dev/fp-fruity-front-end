@@ -1,53 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fruit Salad, Yummy Yummy.</title>
-    <link rel="shortcut icon" href="./public/favicon.png" type="image/x-icon">
-    <link rel="stylesheet" href="src/style.css">
-</head>
+    <link rel="shortcut icon" href="./public/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
 
-<body>
-    <main class="container">
-        <section id="input-sect">
-            <form>
-                <h1 for="fruit">Fruit</h1>
-                <input type="text" name="fruit" placeholder="Banana..." required>
-                <div>
-                    <button>Submit</button>
-                </div>
-            </form>
-        </section>
+  <body>
+    <div class="container">
+      <header class="header">
+        <form class="header-searchbar">
+          <input type="text" name="fruit" placeholder="Banana..." required />
+          <button>Submit</button>
+        </form>
 
-        <section class="stats-sect">
+        <nav class="header-nav">
+          <button>
+            <a href="/add-fruit">Add Fruit</a>
+          </button>
 
-            <article id="nutrition-sect">
-                <h2>All the fruits</h2>
-                <ul class="fruit-list"></ul>
-            </article>
+          <button>
+            <a href="https://github.com/sord-dev" target="_blank">Github</a>
+          </button>
+        </nav>
+      </header>
 
-            <article class="nutrition-widgets">
-                <div id="calories">
-                    <h3>total calories: 0</h3>
-                </div>
-            </article>
-        </section>
+      <main class="main-content">
+        <aside class="main-sidebar">
+            <h1>selected items</h1>
 
+            <ul class="selected-items-list">
+        
+            </ul>
 
-        <section id="create-fruit">
-            <h3>Create fruit</h3>
-            <form id="create-fruit-form">
-                <label for="fruit-name">Name</label>
-                <input type="text" name="fruit" placeholder="Banana..." required> 
-                <button>Submit</button>
-            </form>
-        </section>
-    </main>
+            <div class="selected-item-totals">
+              <div>
+                <span>cals</span>
+                <button class="selected-item-totals-cals">0</button>
+              </div>
+                
+              <div>
+                <span>protein</span>
+                <button class="selected-item-totals-protein">0</button>
+              </div>
+            </div>
+        </aside>
+
+        <article class="fruit-bar">
+          <h2>All the fruits</h2>
+          <ul class="fruit-list">
+
+          </ul>
+        </article>
+
+        <!-- <section id="create-fruit">
+          <h3>Create fruit</h3>
+          <form id="create-fruit-form">
+            <label for="fruit-name">Name</label>
+            <input type="text" name="fruit" placeholder="Banana..." required />
+            <button>Submit</button>
+          </form>
+        </section> -->
+      </main>
+    </div>
 
     <script src="bundle.js"></script>
-</body>
-
+  </body>
 </html>

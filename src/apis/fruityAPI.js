@@ -1,7 +1,7 @@
 // acc url = https://fruit-api.onrender.com/
 
 const fruity = {
-    baseurl: 'http://localhost:3000',
+    baseurl: 'http://localhost:5000',
     async getFruit(query) {
         try {
             const pRes = await fetch(`${this.baseurl}/fruits/${query}`);
@@ -21,8 +21,8 @@ const fruity = {
             return error;
         }
     },
-
-    // posts false? 
+    
+    // ss error where data returns false on the post route
     async postFruit(fruitData) {
         const data = JSON.stringify(fruitData);
         console.log(fruitData);
