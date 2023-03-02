@@ -1,12 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>test</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Fruit</title>
+    <link rel="shortcut icon" href="public/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="src/add-fruit-style.css" />
+  </head>
+  <body class="container">
+    <header>
+      <button>
+        <a href="index.html">go back</a>
+      </button>
+    </header>
+
+    <main>
+        <form class="main-form">
+            <h1>Create a fruit 🍍🍈🍊</h1>
+            <div class="general-info-container">
+                <label for="general-info">General Info</label>
+                <div  class="general-info-input-group">
+                    <input type="text" name="name" placeholder="Fruit name">
+                    <input type="text" name="genus" placeholder="Genus">
+                </div>
+            </div>
+
+            <div class="nutritional-info-container">
+                <label for="nutritional-info">Nutritional Info</label>
+                <div class="nutritional-info-input-group">
+                    <input type="text" name="protein" placeholder="Protein">
+                    <input type="text" name="sugar" placeholder="Sugar">
+                    <input type="text" name="fat" placeholder="Fat">
+                    <input type="text" name="carbohydrates" placeholder="Carbohydrates">
+                    <input type="text" name="calories" placeholder="Calories">
+                </div>
+            </div>
+
+            <button>Create fruit</button>
+        </form>
+    </main>
+  </body>
 </html>
