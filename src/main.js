@@ -5,7 +5,6 @@ const { fruity } = require("./apis");
 const fruitFormInput = document.querySelector("header .header-searchbar input");
 const fruitList = document.querySelector(".fruit-bar .fruit-list");
 const selectedFruitsList = document.querySelector(".selected-items-list");
-// const addFruitForm = document.querySelector("#create-fruit-form");
 
 const totalCalsEl = document.querySelector(".selected-item-totals-cals");
 const totalProteinEl = document.querySelector(".selected-item-totals-protein");
@@ -53,18 +52,34 @@ fruitFormInput.addEventListener("input", async (e) => {
   }
 });
 
-// handle fruit card delete on click
-fruitList.addEventListener("click", (e) => {
+// handle fruit card click
+fruitList.addEventListener("click", async (e) => {
   // get data to update state
-  const target = e.target.closest("li");
-  const name = target.dataset.name.toLowerCase() || "";
-  const calories = Number(target.dataset.calories) || 0;
-  const protein = Number(target.dataset.protein) || 0;
+  const targetItem = e.target.closest("li");
+  const targetAction = e.target.closest("button");
+
+  if (!targetItem || !targetAction) return;
+
+  if (targetAction.innerText === "X") {
+    const res = await fruity.deleteFruit(targetItem.dataset.id);
+    console.log(res);
+    targetItem.remove();
+  } else if (targetAction.innerText === "Select") {
+    selectFruit(targetItem);
+  } else {
+    return;
+  }
+});
+
+// PS why is it so verbose to do the simpliest of things bruh... i hate vnl js....
+
+function selectFruit(target) {
+  const { name, calories, protein } = target.dataset;
 
   // update state
   selectedFruits.push(name);
-  totalCals += calories;
-  totalProtein += protein;
+  totalCals += Number(calories);
+  totalProtein += Number(protein);
   totalCalsEl.innerHTML = Math.round(totalCals);
   totalProteinEl.innerHTML = totalProtein.toFixed(2);
 
@@ -80,18 +95,4 @@ fruitList.addEventListener("click", (e) => {
     el.innerHTML = `${selItem[0]} x ${selItem[1] == 1 ? 1 : selItem[1]}`;
     selectedFruitsList.appendChild(el);
   }
-});
-
-// creation somewhat done - SyntaxError: Unexpected token 'c', "creation e"... is not valid JSON?
-// but still adds the fruit sometimes
-// addFruitForm.addEventListener("submit", async (e) => {
-//   const { fruit } = useForm(e);
-//   const data = { name: fruit };
-
-//   if (fruit) {
-//     const res = await fruity.postFruit(data);
-//     console.log(res);
-//   }
-// });
-
-// PS why is it so verbose to do the simpliest of things bruh... i hate vnl js....
+}

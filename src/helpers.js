@@ -1,15 +1,3 @@
-function useForm(e) {
-  e.preventDefault();
-  let values = {};
-  let inputs = e.target.querySelectorAll("input");
-
-  inputs.forEach((input) => (values[input.name] = input.value));
-
-  e.target.reset();
-
-  return values;
-}
-
 function createFormError(error, form) {
   const err = form.querySelector(".error");
   if (err) {
@@ -19,18 +7,6 @@ function createFormError(error, form) {
     errorEl.textContent = error;
     errorEl.className = "error";
     form.appendChild(errorEl);
-  }
-}
-
-function createThumbnail(img) {
-  const fruitImg = document.createElement("img");
-  if (!img) {
-    fruitImg.src = "https://via.placeholder.com/300";
-    return fruitImg;
-  } else {
-    const { previewURL } = img;
-    fruitImg.src = previewURL;
-    return fruitImg;
   }
 }
 
@@ -47,16 +23,12 @@ function createNutritionList(nutritionList = []) {
   return innerEl;
 }
 
-function createFruitCard(fruitRes, img) {
+function createFruitCard(fruitRes) {
   if (fruitRes.error) {
     createFormError(fruitRes.error, list);
   } else {
-    const { name, genus, nutritions } = fruitRes;
+    const { id, name, genus, nutritions } = fruitRes;
     const el = document.createElement("li");
-
-    //create thumbnail
-    const fruitImg = createThumbnail(img);
-    el.appendChild(fruitImg);
 
     //create container for metadata
     const metaContainer = document.createElement("div");
@@ -74,10 +46,26 @@ function createFruitCard(fruitRes, img) {
     metaContainer.appendChild(nutritionListEl);
     el.appendChild(metaContainer);
 
+    const buttonContainer = document.createElement("div");
+    const deleteBtn = document.createElement("button");
+    const selectBtn = document.createElement("button");
+    selectBtn.innerText = "Select";
+    selectBtn.dataset.select = "true";
+    deleteBtn.innerText = "X";
+    deleteBtn.dataset.delete = "true";
+
+    buttonContainer.className = "item-action-group";
+
+    buttonContainer.appendChild(deleteBtn);
+    buttonContainer.appendChild(selectBtn);
+
+    el.appendChild(buttonContainer);
+
     el.className = "fruit-list-item";
     el.dataset.name = name;
     el.dataset.calories = nutritions.calories;
-    el.dataset.protein  = nutritions.protein;
+    el.dataset.protein = nutritions.protein;
+    el.dataset.id = id;
 
     return el;
   }
@@ -88,13 +76,10 @@ function createFreqObj(arr) {
   for (item of arr) {
     freq[item] ? freq[item]++ : (freq[item] = 1);
   }
-  return freq
+  return freq;
 }
 
 module.exports = {
-  useForm,
-  createFormError,
   createFruitCard,
-  createFormError,
-  createFreqObj
+  createFreqObj,
 };

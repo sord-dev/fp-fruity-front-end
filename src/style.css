@@ -140,7 +140,7 @@ a {
 
 .selected-item-totals div {
   display: flex;
- flex-direction: column;
+  flex-direction: column;
 }
 
 .selected-item-totals div button {
@@ -165,17 +165,21 @@ a {
   background-color: aliceblue;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-radius: 6px;
   width: 100%;
   overflow: hidden;
+  padding: 1em;
 }
 
-.fruit-list-item img {
-  width: 176px;
-  border-radius: 6px 0 0 6px;
-  object-fit: cover;
+.fruit-list-item button {
+  height: 40px;
 }
 
+.item-action-group {
+  display: flex;
+  gap: 1em;
+}
 .fruit-list-item .metadata-container {
   padding: 1em;
 }
@@ -187,6 +191,7 @@ a {
 @media screen and (max-width: 1300px) {
   .fruit-list-item {
     flex-direction: column;
+    text-align: center;
   }
 
   .fruit-list-item img {

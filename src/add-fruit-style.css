@@ -73,74 +73,90 @@ a {
   text-decoration: none;
 }
 
+header {
+  margin-bottom: 24px;
+}
+
 .main-form {
-    background-color: white;
-    max-width: 500px;
-    margin: 0 auto;
+  background-color: white;
+  max-width: 500px;
+  margin: 0 auto;
 
-    padding: 1em;
-    border-radius: 6px;
+  padding: 1em;
+  border-radius: 6px;
 }
 
-.main-form h1{
-   margin-bottom: 12px;
+.main-form h1 {
+  margin-bottom: 12px;
 }
-
 
 .main-form button {
-    width: 100%;
-    font-size: 1em;
-    padding: 8px 16px;
+  width: 100%;
+  font-size: 1em;
+  padding: 8px 16px;
 }
 
 .main-form input {
-    padding: 6px 12px;
-    font-size: 1em;
-    border: 0;
-    background-color: aliceblue;
+  padding: 6px 12px;
+  font-size: 1em;
+  border: 0;
+  background-color: aliceblue;
 }
 
 .general-info-container,
 .nutritional-info-container {
-    margin-bottom: 20px;
-} 
+  margin-bottom: 20px;
+}
 
 .general-info-input-group,
 .nutritional-info-input-group {
-    max-width: 90%;
-    margin: 0 auto;
-    flex-wrap: wrap;
+  max-width: 90%;
+  margin: 0 auto;
+  flex-wrap: wrap;
 }
 
-
 .main-form label {
-    font-size: 1.1em;
+  font-size: 1.1em;
 }
 
 .main-form .general-info-input-group {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .main-form .general-info-input-group input {
-    max-width: 200px
+  max-width: 200px;
 }
 
 .main-form .nutritional-info-input-group {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(60px, 200px));
-    gap: 1em;
-    justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(60px, 200px));
+  gap: 1em;
+  justify-content: space-between;
+}
+
+.notification {
+  margin-top: 10px;
+  text-align: center;
+  color: green;
+}
+
+.notification.hide {
+  display: none;
+}
+
+.notification .error {
+  color: red;
 }
 
 @media screen and (max-width: 600px) {
-    .general-info-input-group {
-        gap: 1em;
-        justify-content: center;
-        align-items: center;
-    }
+  .general-info-input-group {
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .main-form input {
-        max-width: 120px
-    }
+  .main-form input {
+    max-width: 120px;
+  }
 }

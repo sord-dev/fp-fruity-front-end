@@ -2,50 +2,62 @@
 // acc url = https://fruit-api.onrender.com
 
 const fruity = {
-    baseurl: 'https://fruit-api.onrender.com',
-    async getFruit(query) {
-        try {
-            const pRes = await fetch(`${this.baseurl}/fruits/${query}`);
-            const res = await pRes.json();
-            return res;
-        } catch (error) {
-            return error;
-        }
-    },
-
-    async getAllFruits() {
-        try {
-            const pRes = await fetch(`${this.baseurl}/fruits`);
-            const res = await pRes.json();
-            return res;
-        } catch (error) {
-            return error;
-        }
-    },
-    
-    // ss error where data returns false on the post route
-    async postFruit(fruitData) {
-        const data = JSON.stringify(fruitData);
-        console.log(fruitData);
-        try {
-            const pRes = await fetch(`${this.baseurl}/fruits`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: data
-            });
-
-            const res = await pRes.json();
-
-            return res;
-        } catch (error) {
-            return error;
-        }
+  baseurl: "https://fruit-api.onrender.com",
+  async getFruit(query) {
+    try {
+      const pRes = await fetch(`${this.baseurl}/fruits/${query}`);
+      const res = await pRes.json();
+      return res;
+    } catch (error) {
+      return error;
     }
-}
+  },
 
-module.exports = { fruity }
+  async getAllFruits() {
+    try {
+      const pRes = await fetch(`${this.baseurl}/fruits`);
+      const res = await pRes.json();
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
+
+  // ss error where data returns false on the post route
+  async postFruit(fruitData) {
+    const data = JSON.stringify(fruitData);
+    console.log(fruitData);
+    try {
+      const pRes = await fetch(`${this.baseurl}/fruits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: data,
+      });
+
+      const res = await pRes.json();
+
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
+  async deleteFruit(id) {
+    if (!id) return;
+    try {
+      const pRes = await fetch(`${this.baseurl}/fruits/${id}`, { method: "DELETE" });
+
+      const res = await pRes.json();
+      return res;
+    } catch (error) {
+      return error;
+    }
+  },
+};
+
+module.exports = { fruity };
+
 },{}],2:[function(require,module,exports){
 const { fruity } = require('./fruityAPI')
 const { pixabay } = require('./pixabayAPI')
@@ -71,18 +83,6 @@ const pixabay = {
 
 module.exports = { pixabay }
 },{}],4:[function(require,module,exports){
-function useForm(e) {
-  e.preventDefault();
-  let values = {};
-  let inputs = e.target.querySelectorAll("input");
-
-  inputs.forEach((input) => (values[input.name] = input.value));
-
-  e.target.reset();
-
-  return values;
-}
-
 function createFormError(error, form) {
   const err = form.querySelector(".error");
   if (err) {
@@ -92,18 +92,6 @@ function createFormError(error, form) {
     errorEl.textContent = error;
     errorEl.className = "error";
     form.appendChild(errorEl);
-  }
-}
-
-function createThumbnail(img) {
-  const fruitImg = document.createElement("img");
-  if (!img) {
-    fruitImg.src = "https://via.placeholder.com/300";
-    return fruitImg;
-  } else {
-    const { previewURL } = img;
-    fruitImg.src = previewURL;
-    return fruitImg;
   }
 }
 
@@ -120,16 +108,12 @@ function createNutritionList(nutritionList = []) {
   return innerEl;
 }
 
-function createFruitCard(fruitRes, img) {
+function createFruitCard(fruitRes) {
   if (fruitRes.error) {
     createFormError(fruitRes.error, list);
   } else {
-    const { name, genus, nutritions } = fruitRes;
+    const { id, name, genus, nutritions } = fruitRes;
     const el = document.createElement("li");
-
-    //create thumbnail
-    const fruitImg = createThumbnail(img);
-    el.appendChild(fruitImg);
 
     //create container for metadata
     const metaContainer = document.createElement("div");
@@ -147,10 +131,26 @@ function createFruitCard(fruitRes, img) {
     metaContainer.appendChild(nutritionListEl);
     el.appendChild(metaContainer);
 
+    const buttonContainer = document.createElement("div");
+    const deleteBtn = document.createElement("button");
+    const selectBtn = document.createElement("button");
+    selectBtn.innerText = "Select";
+    selectBtn.dataset.select = "true";
+    deleteBtn.innerText = "X";
+    deleteBtn.dataset.delete = "true";
+
+    buttonContainer.className = "item-action-group";
+
+    buttonContainer.appendChild(deleteBtn);
+    buttonContainer.appendChild(selectBtn);
+
+    el.appendChild(buttonContainer);
+
     el.className = "fruit-list-item";
     el.dataset.name = name;
     el.dataset.calories = nutritions.calories;
-    el.dataset.protein  = nutritions.protein;
+    el.dataset.protein = nutritions.protein;
+    el.dataset.id = id;
 
     return el;
   }
@@ -161,15 +161,12 @@ function createFreqObj(arr) {
   for (item of arr) {
     freq[item] ? freq[item]++ : (freq[item] = 1);
   }
-  return freq
+  return freq;
 }
 
 module.exports = {
-  useForm,
-  createFormError,
   createFruitCard,
-  createFormError,
-  createFreqObj
+  createFreqObj,
 };
 
 },{}],5:[function(require,module,exports){
@@ -180,7 +177,6 @@ const { fruity } = require("./apis");
 const fruitFormInput = document.querySelector("header .header-searchbar input");
 const fruitList = document.querySelector(".fruit-bar .fruit-list");
 const selectedFruitsList = document.querySelector(".selected-items-list");
-// const addFruitForm = document.querySelector("#create-fruit-form");
 
 const totalCalsEl = document.querySelector(".selected-item-totals-cals");
 const totalProteinEl = document.querySelector(".selected-item-totals-protein");
@@ -228,18 +224,34 @@ fruitFormInput.addEventListener("input", async (e) => {
   }
 });
 
-// handle fruit card delete on click
-fruitList.addEventListener("click", (e) => {
+// handle fruit card click
+fruitList.addEventListener("click", async (e) => {
   // get data to update state
-  const target = e.target.closest("li");
-  const name = target.dataset.name.toLowerCase() || "";
-  const calories = Number(target.dataset.calories) || 0;
-  const protein = Number(target.dataset.protein) || 0;
+  const targetItem = e.target.closest("li");
+  const targetAction = e.target.closest("button");
+
+  if (!targetItem || !targetAction) return;
+
+  if (targetAction.innerText === "X") {
+    const res = await fruity.deleteFruit(targetItem.dataset.id);
+    console.log(res);
+    targetItem.remove();
+  } else if (targetAction.innerText === "Select") {
+    selectFruit(targetItem);
+  } else {
+    return;
+  }
+});
+
+// PS why is it so verbose to do the simpliest of things bruh... i hate vnl js....
+
+function selectFruit(target) {
+  const { name, calories, protein } = target.dataset;
 
   // update state
   selectedFruits.push(name);
-  totalCals += calories;
-  totalProtein += protein;
+  totalCals += Number(calories);
+  totalProtein += Number(protein);
   totalCalsEl.innerHTML = Math.round(totalCals);
   totalProteinEl.innerHTML = totalProtein.toFixed(2);
 
@@ -255,20 +267,6 @@ fruitList.addEventListener("click", (e) => {
     el.innerHTML = `${selItem[0]} x ${selItem[1] == 1 ? 1 : selItem[1]}`;
     selectedFruitsList.appendChild(el);
   }
-});
-
-// creation somewhat done - SyntaxError: Unexpected token 'c', "creation e"... is not valid JSON?
-// but still adds the fruit sometimes
-// addFruitForm.addEventListener("submit", async (e) => {
-//   const { fruit } = useForm(e);
-//   const data = { name: fruit };
-
-//   if (fruit) {
-//     const res = await fruity.postFruit(data);
-//     console.log(res);
-//   }
-// });
-
-// PS why is it so verbose to do the simpliest of things bruh... i hate vnl js....
+}
 
 },{"./apis":2,"./helpers":4}]},{},[5]);
