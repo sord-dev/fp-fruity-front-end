@@ -8,7 +8,7 @@ const selectedFruitsList = document.querySelector(".selected-items-list");
 // const addFruitForm = document.querySelector("#create-fruit-form");
 
 const totalCalsEl = document.querySelector(".selected-item-totals-cals");
-const totalProteinEl = document.querySelector(" .selected-item-totals-protein");
+const totalProteinEl = document.querySelector(".selected-item-totals-protein");
 
 // --- page state ---
 let fruits = [];
@@ -65,8 +65,8 @@ fruitList.addEventListener("click", (e) => {
   selectedFruits.push(name);
   totalCals += calories;
   totalProtein += protein;
-  totalCalsEl.innerHTML = totalCals;
-  totalProteinEl.innerHTML = totalProtein;
+  totalCalsEl.innerHTML = Math.round(totalCals);
+  totalProteinEl.innerHTML = totalProtein.toFixed(2);
 
   // create tally to display for selected items list
   selectedFruitsFreq = createFreqObj(selectedFruits);

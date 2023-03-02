@@ -45,7 +45,7 @@ section {
 }
 
 .container {
-  max-width: 80%;
+  max-width: 85%;
   margin: 12px auto;
 }
 
@@ -123,12 +123,28 @@ a {
 .main-sidebar .selected-items-list {
   background-color: aliceblue;
   width: 98%;
+  height: 80%;
   margin: 6px auto;
   padding: 6px 12px;
+  border-radius: 6px;
 }
 
 .fruit-bar {
   width: 100%;
+}
+
+.selected-item-totals {
+  display: flex;
+  justify-content: space-around;
+}
+
+.selected-item-totals div {
+  display: flex;
+ flex-direction: column;
+}
+
+.selected-item-totals div button {
+  cursor: default;
 }
 
 /* fruit results */

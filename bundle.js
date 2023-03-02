@@ -1,8 +1,8 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-// acc url = https://fruit-api.onrender.com/
+// acc url = https://fruit-api.onrender.com
 
 const fruity = {
-    baseurl: 'http://localhost:5000',
+    baseurl: 'https://fruit-api.onrender.com',
     async getFruit(query) {
         try {
             const pRes = await fetch(`${this.baseurl}/fruits/${query}`);
@@ -183,7 +183,7 @@ const selectedFruitsList = document.querySelector(".selected-items-list");
 // const addFruitForm = document.querySelector("#create-fruit-form");
 
 const totalCalsEl = document.querySelector(".selected-item-totals-cals");
-const totalProteinEl = document.querySelector(" .selected-item-totals-protein");
+const totalProteinEl = document.querySelector(".selected-item-totals-protein");
 
 // --- page state ---
 let fruits = [];
@@ -240,8 +240,8 @@ fruitList.addEventListener("click", (e) => {
   selectedFruits.push(name);
   totalCals += calories;
   totalProtein += protein;
-  totalCalsEl.innerHTML = totalCals;
-  totalProteinEl.innerHTML = totalProtein;
+  totalCalsEl.innerHTML = Math.round(totalCals);
+  totalProteinEl.innerHTML = totalProtein.toFixed(2);
 
   // create tally to display for selected items list
   selectedFruitsFreq = createFreqObj(selectedFruits);

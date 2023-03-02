@@ -1,7 +1,7 @@
-// acc url = https://fruit-api.onrender.com/
+// acc url = https://fruit-api.onrender.com
 
 const fruity = {
-    baseurl: 'http://localhost:5000',
+    baseurl: 'https://fruit-api.onrender.com',
     async getFruit(query) {
         try {
             const pRes = await fetch(`${this.baseurl}/fruits/${query}`);
